@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30011.22
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Speak2Type", "Speak2Type.csproj", "{EC6EC7DF-91DC-4492-9FF6-72FC8229AA3B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{EC6EC7DF-91DC-4492-9FF6-72FC8229AA3B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EC6EC7DF-91DC-4492-9FF6-72FC8229AA3B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EC6EC7DF-91DC-4492-9FF6-72FC8229AA3B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EC6EC7DF-91DC-4492-9FF6-72FC8229AA3B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {FA5DA9AB-0C41-4CF8-A4CD-9C3B5E8B74E4}
+	EndGlobalSection
+EndGlobal

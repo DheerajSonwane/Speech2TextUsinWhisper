@@ -1,0 +1,121 @@
+﻿@{
+    ViewData["Title"] = "Speak2Type";
+}
+
+ 
+<!DOCTYPE html>
+<html>
+<head>
+    <title>@ViewData["Title"]</title>
+    <!-- Include your JavaScript code here -->
+    <script>
+        let mediaRecorder;
+        let audioChunks = [];
+        let recording = false;
+
+        document.addEventListener('DOMContentLoaded', function () {
+            // Function to transcribe speech and populate the specified textbox
+            function startSpeechRecognition(textboxId) {
+                audioChunks = [];
+                navigator.mediaDevices.getUserMedia({ audio: true })
+                    .then(function (stream) {
+                        mediaRecorder = new MediaRecorder(stream);
+
+                        mediaRecorder.ondataavailable = function (event) {
+                            if (event.data.size > 0) {
+                                audioChunks.push(event.data);
+                            }
+                        };
+
+                        mediaRecorder.onstop = function () {
+                            //saveRecordedAudio();
+                            convertAndTranscribe(textboxId);
+                        };
+
+                        mediaRecorder.start();
+                        recording = true;
+                    })
+                    .catch(function (err) {
+                        console.error('Error accessing microphone:', err);
+                    });
+            }
+
+            $('#name').click(function () {
+                startSpeechRecognition('name');
+            });
+
+            $('#name').focusout(function () {
+                if (recording) {
+                    mediaRecorder.stop();
+                    recording = false;
+                }
+            });
+
+            $('#address').click(function () {
+                startSpeechRecognition('address');
+            });
+
+            $('#address').focusout(function () {
+                if (recording) {
+                    mediaRecorder.stop();
+                    recording = false;
+                }
+            });
+
+            
+
+            function convertAndTranscribe(textboxId) {
+                if (audioChunks.length === 0) {
+                    console.error('No audio data to transcribe.');
+                    return;
+                }
+
+                // Define the data to send (in this case, a FormData object with the audio blob)
+                const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+                const formData = new FormData();
+                formData.append('audio', audioBlob);
+
+                // Make the AJAX call to your server-side proxy
+                $.ajax({
+                    url: '/api/whisper/transcribe', // Replace with the actual URL of your server-side proxy
+                    method: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false, 
+                    success: function (data) {
+                        if(data.text) {
+                            const transcribedText = JSON.parse(data.text);
+                            document.getElementById(textboxId).value = transcribedText.text;
+                            $('#errorMessage').text('');
+                        } else {
+                            console.error('Error transcribing audio.');
+                            const errorMessage = document.getElementById('errorMessage');
+                            errorMessage.textContent = `Error ${error.status}: ${error.responseText}`;
+                        }
+                    },
+                    error: function (error) {
+                        console.error('Error:', error);
+                        const errorMessage = document.getElementById('errorMessage');
+                        errorMessage.textContent = `Error ${error.status}: ${error.responseText}`;
+                    }
+                }); 
+            }
+           
+        }); 
+
+        
+
+    </script>
+</head>
+<body>
+
+    <h2>Speech 2 Text</h2>
+     
+
+    <div id="successMessage" style="color: lawngreen;"></div>
+    <div id="errorMessage" style="color: red;"></div>
+
+    <input type="text" id="name" placeholder="Name" />
+    <input type="text" id="address" placeholder="Address" />
+</body>
+</html>
